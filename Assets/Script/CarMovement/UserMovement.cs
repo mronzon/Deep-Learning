@@ -1,5 +1,7 @@
 ﻿using System;
+using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 namespace Script.CarMovement
 {
@@ -9,6 +11,7 @@ namespace Script.CarMovement
         public int speed = 2;
 
         public float rotationValue = 30;
+
         private Rigidbody rb;
 
         private void Awake()
@@ -16,20 +19,21 @@ namespace Script.CarMovement
             rb = gameObject.GetComponent<Rigidbody>();
         }
 
-        private void FixedUpdate()
+        public Tuple<float, float> Move(Vector3 distance)
         {
             float horizontalMovement = Input.GetAxis("Horizontal");
             float verticalMovement = Input.GetAxis("Vertical");
-
+            
             Vector3 input = new Vector3(verticalMovement, 0, 0);
             transform.Translate(input * Time.deltaTime * speed);
             if (verticalMovement != 0)
             {
-                Quaternion deltaRotation = Quaternion.Euler(new Vector3(0, rotationValue * horizontalMovement, 0) * Time.deltaTime);
+                Quaternion deltaRotation = 
+                    Quaternion.Euler(new Vector3(0, rotationValue * horizontalMovement, 0) * Time.deltaTime);
                 rb.MoveRotation(rb.rotation * deltaRotation);
             }
-            
-            
+
+            return Tuple.Create(horizontalMovement, verticalMovement);
         }
 
     }
