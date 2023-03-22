@@ -11,12 +11,12 @@ TagManager:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Car
   - Water
   - UI
-  - 
-  - 
-  - 
+  - Floor
+  - Wall
+  - ParkingSlot
   - 
   - 
   - 

@@ -1,5 +1,5 @@
 ﻿using System;
-using TMPro;
+using System.Collections;
 using UnityEngine;
 
 using Script.CarMovement;
@@ -20,11 +20,33 @@ namespace Script
 
         private void Update()
         {
+            ArrayList listDistance = CheckObstacle();
             Vector3 distanceToParkingSlot = car.transform.position - parkingSlot.transform.position;
             
             Tuple<float, float> values = car.Move(distanceToParkingSlot);
             
-            canvas.TextChange(values.Item1, values.Item2, distanceToParkingSlot.magnitude);
+            // canvas.TextChange(values.Item1, values.Item2, distanceToParkingSlot.magnitude);
+        }
+
+        private ArrayList CheckObstacle()
+        {
+            ArrayList distanceRayCast = new ArrayList();
+            Vector3 carPosition = car.transform.position - new Vector3(0, 0.3f, 0);
+            Vector3 directionRay = Quaternion.Euler(0, 90, 0) * car.transform.forward;
+            Ray ray;
+            RaycastHit hitData;
+            float stepAngle = 360f / 8f;
+            for (int i = 0; i < 8; i++)
+            {
+                directionRay = Quaternion.Euler(0, stepAngle * i, 0) * directionRay;
+                ray = new Ray(carPosition, directionRay);
+                Debug.DrawRay(ray.origin, ray.direction);
+                if (Physics.Raycast(ray, out hitData))
+                {
+                    distanceRayCast.Add(hitData.distance < 8 ? distanceRayCast : 0);
+                }
+            }
+            return distanceRayCast;
         }
         
     }

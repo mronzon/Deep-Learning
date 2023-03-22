@@ -1,5 +1,6 @@
 ﻿using System;
 using TMPro;
+using TreeEditor;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -32,8 +33,12 @@ namespace Script.CarMovement
                     Quaternion.Euler(new Vector3(0, rotationValue * horizontalMovement, 0) * Time.deltaTime);
                 rb.MoveRotation(rb.rotation * deltaRotation);
             }
+            else
+            {
+                horizontalMovement = 0;
+            }
 
-            return Tuple.Create(horizontalMovement, verticalMovement);
+            return Tuple.Create(verticalMovement, horizontalMovement);
         }
 
     }
