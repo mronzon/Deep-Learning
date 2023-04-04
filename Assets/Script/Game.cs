@@ -21,7 +21,10 @@ namespace Script
         private void Update()
         {
             ArrayList listDistance = CheckObstacle();
-            Vector3 distanceToParkingSlot = car.transform.position - parkingSlot.transform.position;
+            Vector3 carPosition = car.transform.position;
+            Vector3 parkingPosition = parkingSlot.transform.position;
+            carPosition.y = parkingPosition.y;
+            Vector3 distanceToParkingSlot = carPosition - parkingPosition;
             
             Tuple<float, float> values = car.Move(distanceToParkingSlot);
             
@@ -43,7 +46,11 @@ namespace Script
                 Debug.DrawRay(ray.origin, ray.direction);
                 if (Physics.Raycast(ray, out hitData))
                 {
-                    distanceRayCast.Add(hitData.distance < 8 ? distanceRayCast : 0);
+                    distanceRayCast.Add(hitData.distance < 8 ? distanceRayCast : -1);
+                }
+                else
+                {
+                    distanceRayCast.Add(-1);
                 }
             }
             return distanceRayCast;
