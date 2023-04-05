@@ -3,6 +3,7 @@ using System.Collections;
 using UnityEngine;
 
 using Script.CarMovement;
+using Script.IA;
 
 namespace Script
 {
@@ -10,30 +11,33 @@ namespace Script
     {
         private Canvas canvas;
         private UserMovement car;
+        private IAMovement _IaCar;
         private ParkingSlot parkingSlot;
+        private QLearningAgent _agent;
         private void Awake()
         {
             car = GameObject.FindGameObjectWithTag("Car").GetComponent<UserMovement>();
+            _IaCar = GameObject.FindGameObjectWithTag("Car").GetComponent<IAMovement>();
             parkingSlot = GameObject.FindGameObjectWithTag("ParkingSlot").GetComponent<ParkingSlot>();
             canvas = GameObject.FindGameObjectWithTag("UI Display").GetComponent<Canvas>();
+            _agent = new QLearningAgent(81 * 8 + 500, 40, 0.1, 0.1, 0);
         }
 
         private void Update()
         {
-            ArrayList listDistance = CheckObstacle();
+            float[] sensorsValue = CheckObstacle();
             Vector3 carPosition = car.transform.position;
             Vector3 parkingPosition = parkingSlot.transform.position;
             carPosition.y = parkingPosition.y;
             Vector3 distanceToParkingSlot = carPosition - parkingPosition;
             
-            Tuple<float, float> values = car.Move(distanceToParkingSlot);
             
-            // canvas.TextChange(values.Item1, values.Item2, distanceToParkingSlot.magnitude);
+            
         }
 
-        private ArrayList CheckObstacle()
+        private float[] CheckObstacle()
         {
-            ArrayList distanceRayCast = new ArrayList();
+            float[] distanceRayCast = new float[8];
             Vector3 carPosition = car.transform.position - new Vector3(0, 0.3f, 0);
             Vector3 directionRay = Quaternion.Euler(0, 90, 0) * car.transform.forward;
             Ray ray;
@@ -46,11 +50,11 @@ namespace Script
                 Debug.DrawRay(ray.origin, ray.direction);
                 if (Physics.Raycast(ray, out hitData))
                 {
-                    distanceRayCast.Add(hitData.distance < 8 ? distanceRayCast : -1);
+                    distanceRayCast[i] = hitData.distance < 8f ? hitData.distance : -1f;
                 }
                 else
                 {
-                    distanceRayCast.Add(-1);
+                    distanceRayCast[i] = -1f;
                 }
             }
             return distanceRayCast;
