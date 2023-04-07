@@ -6,16 +6,14 @@ namespace Script.IA
 
     public class QLearningAgent
     {
-        private int numStates;
         private int numActions;
         private Dictionary<Tuple<State, Action>, double> Q;
         private double alpha;
         private double gamma;
         private Random random;
 
-        public QLearningAgent(int numStates, int numActions, double alpha, double gamma, int seed)
+        public QLearningAgent(int numActions, double alpha, double gamma, int seed)
         {
-            this.numStates = numStates;
             this.numActions = numActions;
             this.Q = new Dictionary<Tuple<State, Action>, double>();
             this.alpha = alpha;
@@ -25,14 +23,14 @@ namespace Script.IA
 
         public Action ChooseAction(State state)
         {
-            Dictionary<Action, double> values = GetActionValues(state);
-            Action action;
-            
             if (random.NextDouble() < 0.1) // Epsilon-greedy exploration
             {
                 return Action.RandomAction(numActions:numActions, randomSeed:random);
             }
-
+            
+            Dictionary<Action, double> values = GetActionValues(state);
+            Action action;
+            
             if (values.Count == 0)
             {
                 return Action.RandomAction(numActions:numActions, randomSeed:random);
@@ -70,7 +68,10 @@ namespace Script.IA
                     nextMaxValue = elt.Value;
                 }
             }
-            Q[new Tuple<State, Action>(state, action)] = Q[new Tuple<State, Action>(state, action)] + alpha * (reward + gamma * nextMaxValue - Q[new Tuple<State, Action>(state, action)]);
+
+            Tuple<State, Action> old = new Tuple<State, Action>(state, action);
+            double oldValue = Q.ContainsKey(old) ? Q[old] : 0;
+            Q[old] = oldValue + alpha * (reward + gamma * nextMaxValue - oldValue);
         }
 
         private Dictionary<Action, double> GetActionValues(State state)
@@ -84,7 +85,7 @@ namespace Script.IA
                     Tuple<State, Action> key = new Tuple<State, Action>(state, action);
                     if (Q.ContainsKey(key))
                     {
-                        values[action] = Q[new Tuple<State, Action>(state, action)];
+                        values[action] = Q[key];
                     }
                 }
             }

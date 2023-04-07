@@ -167,6 +167,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 79818fcb55004d6587d2210330935e6e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  IAControl: 1
+  timeToReset: 10
 --- !u!1 &444859238
 GameObject:
   m_ObjectHideFlags: 0
@@ -506,6 +508,7 @@ GameObject:
   - component: {fileID: 892896719}
   - component: {fileID: 892896718}
   - component: {fileID: 892896717}
+  - component: {fileID: 892896723}
   - component: {fileID: 892896722}
   m_Layer: 0
   m_Name: Car
@@ -622,6 +625,20 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &892896723
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 892896716}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2ae5ec90b53e4f0b972a1721ded765f7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  speed: 2
+  rotationValue: 30
 --- !u!1 &963194225
 GameObject:
   m_ObjectHideFlags: 0

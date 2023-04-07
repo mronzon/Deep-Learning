@@ -10,7 +10,7 @@ namespace Script
         public Vector3 locationOffset;
         public Vector3 rotationOffset;
 
-        void FixedUpdate()
+        void Update()
         {
             Vector3 desiredPosition = target.position + target.rotation * locationOffset;
             Vector3 smoothedPosition = Vector3.Lerp(transform.position, desiredPosition, smoothSpeed);

@@ -20,7 +20,7 @@ namespace Script.CarMovement
             rb = gameObject.GetComponent<Rigidbody>();
         }
 
-        public Tuple<float, float> Move(Vector3 distance)
+        public Tuple<float, float> Move()
         {
             float horizontalMovement = Input.GetAxis("Horizontal");
             float verticalMovement = Input.GetAxis("Vertical");

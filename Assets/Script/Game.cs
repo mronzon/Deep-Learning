@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using UnityEngine;
 
 using Script.CarMovement;
@@ -9,30 +8,62 @@ namespace Script
 {
     public class Game : MonoBehaviour
     {
+        public bool IAControl = false;
         private Canvas canvas;
         private UserMovement car;
         private IAMovement _IaCar;
         private ParkingSlot parkingSlot;
         private QLearningAgent _agent;
+        private Vector3 _carPositionStart;
+        private Quaternion _carRotation;
+        public float timeToReset = 10f;
+        private float _timePassed = 0f;
+        private bool _educateTheIA = true;
         private void Awake()
         {
             car = GameObject.FindGameObjectWithTag("Car").GetComponent<UserMovement>();
             _IaCar = GameObject.FindGameObjectWithTag("Car").GetComponent<IAMovement>();
             parkingSlot = GameObject.FindGameObjectWithTag("ParkingSlot").GetComponent<ParkingSlot>();
             canvas = GameObject.FindGameObjectWithTag("UI Display").GetComponent<Canvas>();
-            _agent = new QLearningAgent(81 * 8 + 500, 40, 0.1, 0.1, 0);
+            _agent = new QLearningAgent(42, 0.8, 0.5, 0);
+            Transform transformCar = car.transform;
+            _carPositionStart = transformCar.position;
+            _carRotation = transformCar.rotation;
         }
 
         private void Update()
         {
             float[] sensorsValue = CheckObstacle();
-            Vector3 carPosition = car.transform.position;
-            Vector3 parkingPosition = parkingSlot.transform.position;
-            carPosition.y = parkingPosition.y;
-            Vector3 distanceToParkingSlot = carPosition - parkingPosition;
-            
-            
-            
+            Vector3 distanceToParkingSlot = GetDistanceToParking();
+            if (IAControl)
+            {
+                if (_educateTheIA)
+                {
+                    EducateIA();
+                }
+                _timePassed += Time.deltaTime;
+                if (_timePassed > timeToReset)
+                {
+                    _timePassed = 0;
+                    ResetCar();
+                    _educateTheIA = true;
+                }
+                State state = new State(sensors: sensorsValue, distanceToParkingSlot: distanceToParkingSlot.magnitude);
+                Script.IA.Action action = _agent.ChooseAction(state);
+                _IaCar.Move(action);
+                distanceToParkingSlot = GetDistanceToParking();
+                sensorsValue = CheckObstacle();
+                State newState = new State(sensors: sensorsValue, distanceToParkingSlot: distanceToParkingSlot.magnitude);
+                if (distanceToParkingSlot.magnitude > 50)
+                {
+                    ResetCar();
+                    _agent.UpdateQ(state, action, GetReward(distanceToParkingSlot.magnitude), newState);
+                }
+            }
+            else
+            {
+                car.Move();
+            }
         }
 
         private float[] CheckObstacle()
@@ -59,6 +90,64 @@ namespace Script
             }
             return distanceRayCast;
         }
+
+        private Vector3 GetDistanceToParking()
+        {
+            Vector3 carPosition = car.transform.position;
+            Vector3 parkingPosition = parkingSlot.transform.position;
+            carPosition.y = parkingPosition.y;
+            return carPosition - parkingPosition;
+        }
+
+        private void EducateIA()
+        {
+            float[] sensorsValue ;
+            Vector3 distanceToParkingSlot;
+            float time = 1f / 60f;
+            for (int i = 0; i < 1000; i++)
+            {
+                for (int j = 0; j < 600; j++)
+                {
+                    sensorsValue = CheckObstacle();
+                    distanceToParkingSlot = GetDistanceToParking();
+                    State state = new State(sensors: sensorsValue, distanceToParkingSlot: distanceToParkingSlot.magnitude);
+                    Script.IA.Action action = _agent.ChooseAction(state);
+                    _IaCar.Move(action, time);
+                    distanceToParkingSlot = GetDistanceToParking();
+                    sensorsValue = CheckObstacle();
+                    State newState = new State(sensors: sensorsValue, distanceToParkingSlot: distanceToParkingSlot.magnitude);
+                    if (distanceToParkingSlot.magnitude > 50)
+                    {
+                        ResetCar();
+                        _agent.UpdateQ(state, action, GetReward(distanceToParkingSlot.magnitude), newState);
+                    }
+                }
+                ResetCar();
+            }
+
+            _educateTheIA = false;
+
+        }
         
+        private float GetReward(float distance)
+        {
+            if (distance > 50)
+            {
+                return 0;
+            }
+
+            if (distance > 5)
+            {
+                return -1.1f * distance + 55.5f;
+            }
+
+            return -10 * distance + 50;
+        }
+
+        private void ResetCar()
+        {
+            car.transform.position = _carPositionStart;
+            car.transform.rotation = _carRotation;
+        }
     }
 }
