@@ -213,7 +213,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 269678074}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 6.34, y: 0.45, z: -0.21}
+  m_LocalPosition: {x: 5.14, y: 0.45, z: -2.59}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -696,7 +696,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 795726565}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 4.72, y: 0.45, z: -0.21}
+  m_LocalPosition: {x: 5.26, y: 0.45, z: 2.57}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -731,7 +731,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 827758363}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 1.38, y: -1.7548, z: 11.07}
+  m_LocalPosition: {x: 1.38, y: -1.7548, z: 1.26}
   m_LocalScale: {x: 0.10000001, y: 0.5, z: 2.7181268}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -978,6 +978,7 @@ MonoBehaviour:
   MaxStep: 0
   speed: 2
   rotationValue: 30
+  timeToRest: 10
   targetTransform: {fileID: 1051914278}
 --- !u!114 &892896725
 MonoBehaviour:
@@ -1001,9 +1002,9 @@ MonoBehaviour:
     VectorActionDescriptions: []
     VectorActionSpaceType: 1
     hasUpgradedBrainParametersWithActionSpec: 1
-  m_Model: {fileID: 0}
+  m_Model: {fileID: 5022602860645237092, guid: 677a1d0720bd3524b87c4b9e85932e80, type: 3}
   m_InferenceDevice: 0
-  m_BehaviorType: 0
+  m_BehaviorType: 2
   m_BehaviorName: MoveToParkingSlot
   TeamId: 0
   m_UseChildSensors: 1
@@ -1448,7 +1449,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1106545716}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 3.12, y: 0.45, z: -0.21}
+  m_LocalPosition: {x: 2.58, y: 0.45, z: -0.06}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1788,7 +1789,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1827244888}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 8.09, y: 0.45, z: -0.21}
+  m_LocalPosition: {x: 7.32, y: 0.45, z: 0.13}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
