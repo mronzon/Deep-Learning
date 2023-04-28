@@ -25,6 +25,7 @@
 # Jetbrain Rider cache directory
 .idea/
 
+venv/*
 # Gradle cache directory
 .gradle/
 

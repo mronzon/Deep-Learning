@@ -1,0 +1,47 @@
+{
+    "MoveToParkingSlot": {
+        "checkpoints": [
+            {
+                "steps": 499945,
+                "file_path": "results\\Final\\MoveToParkingSlot\\MoveToParkingSlot-499945.onnx",
+                "reward": 0.4444444444444444,
+                "creation_time": 1682628496.1003313,
+                "auxillary_file_paths": [
+                    "results\\Final\\MoveToParkingSlot\\MoveToParkingSlot-499945.pt"
+                ]
+            },
+            {
+                "steps": 500009,
+                "file_path": "results\\Final\\MoveToParkingSlot\\MoveToParkingSlot-500009.onnx",
+                "reward": 0.4444444444444444,
+                "creation_time": 1682628496.1631627,
+                "auxillary_file_paths": [
+                    "results\\Final\\MoveToParkingSlot\\MoveToParkingSlot-500009.pt"
+                ]
+            },
+            {
+                "steps": 500009,
+                "file_path": "results\\Final\\MoveToParkingSlot\\MoveToParkingSlot-500009.onnx",
+                "reward": null,
+                "creation_time": 1682651797.84696,
+                "auxillary_file_paths": [
+                    "results\\Final\\MoveToParkingSlot\\MoveToParkingSlot-500009.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 500009,
+            "file_path": "results\\Final\\MoveToParkingSlot.onnx",
+            "reward": null,
+            "creation_time": 1682651797.84696,
+            "auxillary_file_paths": [
+                "results\\Final\\MoveToParkingSlot\\MoveToParkingSlot-500009.pt"
+            ]
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.3.0",
+        "mlagents_version": "0.30.0",
+        "torch_version": "1.7.1+cu110"
+    }
+}

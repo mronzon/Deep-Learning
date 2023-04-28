@@ -1,5 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
+using UnityEngine;
+using Random = System.Random;
 
 namespace Script.IA
 {
@@ -90,6 +93,25 @@ namespace Script.IA
                 }
             }
             return values;
+        }
+
+        public void SaveModel(String path)
+        {
+            StreamWriter writer = new StreamWriter(path);
+            foreach (var elt in Q)
+            {
+                Tuple<State, Action> value = elt.Key;
+                for (int i = 0; i < value.Item1.SensorValues.Length; i++)
+                {
+                    writer.Write(value.Item1.SensorValues[i] + "|");
+                }
+
+                writer.Write(value.Item1.DistanceToParkingSlot + "|");
+                writer.Write(value.Item2.Speed + "|");
+                writer.Write(value.Item2.TurningDegree + "\n");
+            }
+            writer.Close();
+            Debug.Log("Saved !");
         }
     }
 }

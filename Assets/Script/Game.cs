@@ -9,6 +9,7 @@ namespace Script
     public class Game : MonoBehaviour
     {
         public bool IAControl = false;
+        public String pathToSaveFile;
         private Canvas canvas;
         private UserMovement car;
         private IAMovement _IaCar;
@@ -48,17 +49,18 @@ namespace Script
                     ResetCar();
                     _educateTheIA = true;
                 }
-                State state = new State(sensors: sensorsValue, distanceToParkingSlot: distanceToParkingSlot.magnitude);
+                State state = new State(sensors: sensorsValue, distanceToParkingSlot: MathF.Round(distanceToParkingSlot.magnitude, 2));
                 Script.IA.Action action = _agent.ChooseAction(state);
                 _IaCar.Move(action);
                 distanceToParkingSlot = GetDistanceToParking();
                 sensorsValue = CheckObstacle();
-                State newState = new State(sensors: sensorsValue, distanceToParkingSlot: distanceToParkingSlot.magnitude);
+                State newState = new State(sensors: sensorsValue, distanceToParkingSlot: MathF.Round(distanceToParkingSlot.magnitude, 2));
                 if (distanceToParkingSlot.magnitude > 50)
                 {
                     ResetCar();
-                    _agent.UpdateQ(state, action, GetReward(distanceToParkingSlot.magnitude), newState);
+                    
                 }
+                _agent.UpdateQ(state, action, GetReward(distanceToParkingSlot.magnitude), newState);
             }
             else
             {
@@ -81,7 +83,7 @@ namespace Script
                 Debug.DrawRay(ray.origin, ray.direction);
                 if (Physics.Raycast(ray, out hitData))
                 {
-                    distanceRayCast[i] = hitData.distance < 8f ? hitData.distance : -1f;
+                    distanceRayCast[i] = hitData.distance < 8f ? MathF.Round(hitData.distance, 2) : -1f;
                 }
                 else
                 {
@@ -104,27 +106,27 @@ namespace Script
             float[] sensorsValue ;
             Vector3 distanceToParkingSlot;
             float time = 1f / 60f;
-            for (int i = 0; i < 1000; i++)
+            for (int i = 0; i < 100; i++)
             {
                 for (int j = 0; j < 600; j++)
                 {
                     sensorsValue = CheckObstacle();
                     distanceToParkingSlot = GetDistanceToParking();
-                    State state = new State(sensors: sensorsValue, distanceToParkingSlot: distanceToParkingSlot.magnitude);
+                    State state = new State(sensors: sensorsValue, distanceToParkingSlot: MathF.Round(distanceToParkingSlot.magnitude, 2));
                     Script.IA.Action action = _agent.ChooseAction(state);
                     _IaCar.Move(action, time);
                     distanceToParkingSlot = GetDistanceToParking();
                     sensorsValue = CheckObstacle();
-                    State newState = new State(sensors: sensorsValue, distanceToParkingSlot: distanceToParkingSlot.magnitude);
+                    State newState = new State(sensors: sensorsValue, distanceToParkingSlot: MathF.Round(distanceToParkingSlot.magnitude, 2));
                     if (distanceToParkingSlot.magnitude > 50)
                     {
                         ResetCar();
-                        _agent.UpdateQ(state, action, GetReward(distanceToParkingSlot.magnitude), newState);
                     }
+                    _agent.UpdateQ(state, action, GetReward(distanceToParkingSlot.magnitude), newState);
                 }
                 ResetCar();
             }
-
+            _agent.SaveModel(pathToSaveFile);
             _educateTheIA = false;
 
         }
